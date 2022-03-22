@@ -1,23 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use \App\Http\Controllers\ArticlesController;
 
 Route::get('/', [\App\Http\Controllers\ArticlesController::class, 'index']);
+Route::view('/about/', 'about');
+Route::view('/contacts/', 'contacts');
 
-Route::get('/about/', function () {
-    return view('about');
-});
-
-Route::get('/contacts/', function () {
-    return view('contacts');
-});
-
-Route::get('/articles', [\App\Http\Controllers\ArticlesController::class, 'index']);
-Route::post('/articles', [\App\Http\Controllers\ArticlesController::class, 'store']);
-Route::get('/articles/create', function () {
-    return view('articles.create');
-});
-Route::get('/articles/{article}', [\App\Http\Controllers\ArticlesController::class, 'show']);
+Route::resource('articles', ArticlesController::class);
 
 Route::post('/admin/feedback', [\App\Http\Controllers\FeedbackController::class, 'store']);
 Route::get('/admin/feedback', [\App\Http\Controllers\FeedbackController::class, 'index']);
