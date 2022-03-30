@@ -38,14 +38,6 @@ class ArticlesController extends Controller
      */
     public function store(ArticleRequest $request)
     {
-        /*$attributes = request()->validate([
-            'slug' => 'required|unique:articles|min:3|max:100|alpha_dash',
-            'title' => 'required|min:5|max:100',
-            'preview' => 'required|max:255',
-            'body' => 'required',
-            'published' => '',
-        ]);*/
-
         Article::create($request->validated());
 
         return redirect('/articles');
@@ -82,14 +74,6 @@ class ArticlesController extends Controller
      */
     public function update(ArticleRequest $request, Article $article)
     {
-        /*$attributes = request()->validate([
-            'slug' => 'required|min:3|max:100|alpha_dash',
-            'title' => 'required|min:5|max:100',
-            'preview' => 'required|max:255',
-            'body' => 'required',
-            'published' => '',
-        ]);*/
-
         $article->update($request->validated());
 
         return redirect('/articles/' . $article->slug);
