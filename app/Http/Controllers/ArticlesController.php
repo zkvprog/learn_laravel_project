@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Article\ArticleRequest;
 use App\Models\Article;
 use Illuminate\Http\Request;
 
@@ -35,17 +36,17 @@ class ArticlesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ArticleRequest $request)
     {
-        $attributes = request()->validate([
+        /*$attributes = request()->validate([
             'slug' => 'required|unique:articles|min:3|max:100|alpha_dash',
             'title' => 'required|min:5|max:100',
             'preview' => 'required|max:255',
             'body' => 'required',
             'published' => '',
-        ]);
+        ]);*/
 
-        Article::create($attributes);
+        Article::create($request->validated());
 
         return redirect('/articles');
     }
@@ -79,17 +80,17 @@ class ArticlesController extends Controller
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Article $article)
+    public function update(ArticleRequest $request, Article $article)
     {
-        $attributes = request()->validate([
+        /*$attributes = request()->validate([
             'slug' => 'required|min:3|max:100|alpha_dash',
             'title' => 'required|min:5|max:100',
             'preview' => 'required|max:255',
             'body' => 'required',
             'published' => '',
-        ]);
+        ]);*/
 
-        $article->update($attributes);
+        $article->update($request->validated());
 
         return redirect('/articles/' . $article->slug);
     }
