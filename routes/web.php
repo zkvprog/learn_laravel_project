@@ -6,7 +6,9 @@ use \App\Http\Controllers\ArticlesController;
 Route::get('/', [\App\Http\Controllers\ArticlesController::class, 'index']);
 Route::view('/about/', 'about');
 Route::view('/contacts/', 'contacts');
-
+//Комментарии
+Route::post('/articles/{article}/comments', [\App\Http\Controllers\ArticleCommentsController::class, 'store']);
+//Статьи
 Route::resource('articles', ArticlesController::class);
 
 Route::post('/admin/feedback', [\App\Http\Controllers\FeedbackController::class, 'store']);
