@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Article\ArticleRequest;
 use App\Models\Article;
 use App\Models\Tag;
+use App\Services\TagsSynchronizer;
 use Illuminate\Http\Request;
 
 class ArticlesController extends Controller
@@ -37,9 +38,10 @@ class ArticlesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ArticleRequest $request)
+    public function store(ArticleRequest $request, TagsSynchronizer $tagsSynchronizer)
     {
-        Article::create($request->validated());
+        $article = Article::create($request->validated());
+        $tagsSynchronizer->sync(collect(explode(',', request('tags'))), $article);
 
         return redirect('/articles');
     }
@@ -73,11 +75,13 @@ class ArticlesController extends Controller
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function update(ArticleRequest $request, Article $article)
+    public function update(ArticleRequest $request, Article $article, TagsSynchronizer $tagsSynchronizer)
     {
         $article->update($request->validated());
 
-        $articleTags = $article->tags->keyBy('name');
+        $tagsSynchronizer->sync(collect(explode(',', request('tags'))), $article);
+
+       /* $articleTags = $article->tags->keyBy('name');
         $tags = collect(explode(',', request('tags')))->keyBy(function($item) {
             return $item;
         });
@@ -87,7 +91,7 @@ class ArticlesController extends Controller
         foreach ($tagsToAttach as $tag) {
             $tag = Tag::firstOrCreate(['name' => $tag]);
             $syncIds[] = $tag->id;
-        }
+        }*/
 
         /*
         $tagsToDetach = $articleTags->diffKeys($tags);
@@ -101,7 +105,7 @@ class ArticlesController extends Controller
             $article->tags()->detach($tag);
         }*/
 
-        $article->tags()->sync($syncIds);
+        //$article->tags()->sync($syncIds);
 
         return redirect('/articles/' . $article->slug);
     }
