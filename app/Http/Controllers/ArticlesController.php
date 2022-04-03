@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Article\ArticleRequest;
 use App\Models\Article;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 
 class ArticlesController extends Controller
@@ -15,7 +16,7 @@ class ArticlesController extends Controller
      */
     public function index()
     {
-        $articles = Article::published(1)->latest()->get(); // scopePublished ::where('published', $val)
+        $articles = Article::published(1)->with('tags')->latest()->get(); // scopePublished ::where('published', $val)
 
         return view('articles.index', compact('articles'));
     }
@@ -75,6 +76,32 @@ class ArticlesController extends Controller
     public function update(ArticleRequest $request, Article $article)
     {
         $article->update($request->validated());
+
+        $articleTags = $article->tags->keyBy('name');
+        $tags = collect(explode(',', request('tags')))->keyBy(function($item) {
+            return $item;
+        });
+
+        $syncIds = $articleTags->intersectByKeys($tags)->pluck('id')->toArray();
+        $tagsToAttach = $tags->diffKeys($articleTags);
+        foreach ($tagsToAttach as $tag) {
+            $tag = Tag::firstOrCreate(['name' => $tag]);
+            $syncIds[] = $tag->id;
+        }
+
+        /*
+        $tagsToDetach = $articleTags->diffKeys($tags);
+
+        foreach ($tagsToAttach as $tag) {
+            $tag = Tag::firstOrCreate(['name' => $tag]);
+            $article->tags()->attach($tag);
+        }
+
+        foreach ($tagsToDetach as $tag) {
+            $article->tags()->detach($tag);
+        }*/
+
+        $article->tags()->sync($syncIds);
 
         return redirect('/articles/' . $article->slug);
     }
