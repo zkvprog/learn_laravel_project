@@ -9,7 +9,8 @@ use Illuminate\Support\Collection;
 
 class TagsSynchronizer
 {
-    public function sync(Collection $tags, Model $model) {
+    public function sync(Collection $tags, Model $model)
+    {
         //Ключи мапы по name
         $modelTags = $model->tags->keyBy('name');
         $tags = $tags->keyBy(function($item) {

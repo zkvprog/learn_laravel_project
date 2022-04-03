@@ -17,7 +17,7 @@ class ArticlesController extends Controller
      */
     public function index()
     {
-        $articles = Article::published(1)->with('tags')->latest()->get(); // scopePublished ::where('published', $val)
+        $articles = Article::published(1)->with('tags')->latest()->get();
 
         return view('articles.index', compact('articles'));
     }
@@ -80,32 +80,6 @@ class ArticlesController extends Controller
         $article->update($request->validated());
 
         $tagsSynchronizer->sync(collect(explode(',', request('tags'))), $article);
-
-       /* $articleTags = $article->tags->keyBy('name');
-        $tags = collect(explode(',', request('tags')))->keyBy(function($item) {
-            return $item;
-        });
-
-        $syncIds = $articleTags->intersectByKeys($tags)->pluck('id')->toArray();
-        $tagsToAttach = $tags->diffKeys($articleTags);
-        foreach ($tagsToAttach as $tag) {
-            $tag = Tag::firstOrCreate(['name' => $tag]);
-            $syncIds[] = $tag->id;
-        }*/
-
-        /*
-        $tagsToDetach = $articleTags->diffKeys($tags);
-
-        foreach ($tagsToAttach as $tag) {
-            $tag = Tag::firstOrCreate(['name' => $tag]);
-            $article->tags()->attach($tag);
-        }
-
-        foreach ($tagsToDetach as $tag) {
-            $article->tags()->detach($tag);
-        }*/
-
-        //$article->tags()->sync($syncIds);
 
         return redirect('/articles/' . $article->slug);
     }
