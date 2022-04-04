@@ -30,4 +30,9 @@ class Article extends Model
     {
         return $this->comments()->create($attributes);
     }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'tag_article');
+    }
 }

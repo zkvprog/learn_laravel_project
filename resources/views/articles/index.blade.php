@@ -11,6 +11,9 @@
                                 <a class="text-dark" href="/articles/{{$article->slug}}">{{$article->title}}</a>
                             </h3>
                             <div class="mb-1 text-muted">{{$article->created_at->toFormattedDateString()}}</div>
+
+                           @include('articles.tags', ['tags' => $article->tags])
+
                             <p class="card-text mb-auto">{{$article->preview}}</p>
                             <a href="/articles/{{$article->slug}}" class="small">Continue reading</a>
                         </div>
