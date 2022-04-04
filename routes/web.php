@@ -12,8 +12,8 @@ Route::post('/articles/{article}/comments', [\App\Http\Controllers\ArticleCommen
 //Статьи
 Route::resource('articles', \App\Http\Controllers\ArticlesController::class);
 
-Route::post('/admin/feedback', [\App\Http\Controllers\FeedbackController::class, 'store']);
-Route::get('/admin/feedback', [\App\Http\Controllers\FeedbackController::class, 'index']);
+Route::post('/admin/feedback', [\App\Http\Controllers\FeedbackController::class, 'store'])->middleware(['auth']);
+Route::get('/admin/feedback', [\App\Http\Controllers\FeedbackController::class, 'index'])->middleware(['auth']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
