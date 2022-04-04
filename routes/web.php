@@ -6,6 +6,8 @@ use \App\Http\Controllers\ArticlesController;
 Route::get('/', [\App\Http\Controllers\ArticlesController::class, 'index']);
 Route::view('/about/', 'about');
 Route::view('/contacts/', 'contacts');
+
+Route::get('articles/tags/{tag}', [\App\Http\Controllers\TagsController::class, 'index']);
 //Комментарии
 Route::post('/articles/{article}/comments', [\App\Http\Controllers\ArticleCommentsController::class, 'store']);
 //Статьи

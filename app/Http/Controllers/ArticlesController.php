@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Article\ArticleRequest;
 use App\Models\Article;
+use App\Models\Tag;
+use App\Services\TagsSynchronizer;
 use Illuminate\Http\Request;
 
 class ArticlesController extends Controller
@@ -15,7 +17,7 @@ class ArticlesController extends Controller
      */
     public function index()
     {
-        $articles = Article::published(1)->latest()->get(); // scopePublished ::where('published', $val)
+        $articles = Article::published(1)->with('tags')->latest()->get();
 
         return view('articles.index', compact('articles'));
     }
@@ -36,9 +38,10 @@ class ArticlesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ArticleRequest $request)
+    public function store(ArticleRequest $request, TagsSynchronizer $tagsSynchronizer)
     {
-        Article::create($request->validated());
+        $article = Article::create($request->validated());
+        $tagsSynchronizer->sync(collect(explode(',', request('tags'))), $article);
 
         return redirect('/articles');
     }
@@ -72,9 +75,11 @@ class ArticlesController extends Controller
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function update(ArticleRequest $request, Article $article)
+    public function update(ArticleRequest $request, Article $article, TagsSynchronizer $tagsSynchronizer)
     {
         $article->update($request->validated());
+
+        $tagsSynchronizer->sync(collect(explode(',', request('tags'))), $article);
 
         return redirect('/articles/' . $article->slug);
     }

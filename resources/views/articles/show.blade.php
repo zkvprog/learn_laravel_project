@@ -17,6 +17,8 @@
                 </p>
             </form>
 
+            @include('articles.tags', ['tags' => $article->tags])
+
             <p>{{$article->preview}}</p>
             <hr>
             <p>{{$article->body}}</p>
