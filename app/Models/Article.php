@@ -20,4 +20,19 @@ class Article extends Model
     {
         return $query->where('published', $val);
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function addComment($attributes)
+    {
+        return $this->comments()->create($attributes);
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'tag_article');
+    }
 }

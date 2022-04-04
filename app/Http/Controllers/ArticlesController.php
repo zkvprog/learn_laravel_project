@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Article\ArticleRequest;
 use App\Models\Article;
+use App\Models\Tag;
+use App\Services\TagsSynchronizer;
 use Illuminate\Http\Request;
 
 class ArticlesController extends Controller
@@ -14,7 +17,7 @@ class ArticlesController extends Controller
      */
     public function index()
     {
-        $articles = Article::published(1)->latest()->get(); // scopePublished ::where('published', $val)
+        $articles = Article::published(1)->with('tags')->latest()->get();
 
         return view('articles.index', compact('articles'));
     }
@@ -35,17 +38,10 @@ class ArticlesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ArticleRequest $request, TagsSynchronizer $tagsSynchronizer)
     {
-        $attributes = request()->validate([
-            'slug' => 'required|unique:articles|min:3|max:100|alpha_dash',
-            'title' => 'required|min:5|max:100',
-            'preview' => 'required|max:255',
-            'body' => 'required',
-            'published' => '',
-        ]);
-
-        Article::create($attributes);
+        $article = Article::create($request->validated());
+        $tagsSynchronizer->sync(collect(explode(',', request('tags'))), $article);
 
         return redirect('/articles');
     }
@@ -79,17 +75,11 @@ class ArticlesController extends Controller
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Article $article)
+    public function update(ArticleRequest $request, Article $article, TagsSynchronizer $tagsSynchronizer)
     {
-        $attributes = request()->validate([
-            'slug' => 'required|min:3|max:100|alpha_dash',
-            'title' => 'required|min:5|max:100',
-            'preview' => 'required|max:255',
-            'body' => 'required',
-            'published' => '',
-        ]);
+        $article->update($request->validated());
 
-        $article->update($attributes);
+        $tagsSynchronizer->sync(collect(explode(',', request('tags'))), $article);
 
         return redirect('/articles/' . $article->slug);
     }
