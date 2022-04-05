@@ -10,6 +10,13 @@ use Illuminate\Http\Request;
 
 class ArticlesController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth')->except('index');
+        $this->middleware('can:update,article')->except(['index', 'create', 'store']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +24,11 @@ class ArticlesController extends Controller
      */
     public function index()
     {
-        $articles = Article::published(1)->with('tags')->latest()->get();
+        if (auth()->check()) {
+            $articles = auth()->user()->articles()->published(1)->with('tags')->latest()->get();
+        } else {
+            $articles = Article::published(1)->with('tags')->latest()->get();
+        }
 
         return view('articles.index', compact('articles'));
     }
@@ -40,7 +51,9 @@ class ArticlesController extends Controller
      */
     public function store(ArticleRequest $request, TagsSynchronizer $tagsSynchronizer)
     {
-        $article = Article::create($request->validated());
+        $attributes = $request->validated();
+        $attributes['owner_id'] = auth()->id();
+        $article = Article::create($attributes);
         $tagsSynchronizer->sync(collect(explode(',', request('tags'))), $article);
 
         return redirect('/articles');

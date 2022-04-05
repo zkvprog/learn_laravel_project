@@ -12,8 +12,10 @@
 
                 <p class="blog-post-meta d-flex align-items-center">
                     <span class="mr-2">{{$article->created_at->toFormattedDateString()}}</span>
-                    <a class="mr-2 btn btn-sm btn-primary" href="/articles/{{ $article->slug }}/edit">Изменить статью</a>
-                    <button type="submit" class="mr-2 btn btn-sm btn-danger">Удалить статью</button>
+                    @can('update', $article)
+                        <a class="mr-2 btn btn-sm btn-primary" href="/articles/{{ $article->slug }}/edit">Изменить статью</a>
+                        <button type="submit" class="mr-2 btn btn-sm btn-danger">Удалить статью</button>
+                    @endcan
                 </p>
             </form>
 
