@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Events\ArticleCreated;
+use App\Events\ArticleUpdated;
+use App\Events\ArticleDeleted;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,7 +12,12 @@ class Article extends Model
 {
     use HasFactory;
     public $fillable = ['slug', 'title', 'preview', 'body', 'published', 'owner_id'];
-    //protected $guarded = [];
+
+    protected $dispatchesEvents = [
+        'created' => ArticleCreated::class,
+        'updated' => ArticleUpdated::class,
+        'deleted' => ArticleDeleted::class,
+    ];
 
     public function getRouteKeyName()
     {
@@ -34,5 +42,10 @@ class Article extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'tag_article');
+    }
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class);
     }
 }
