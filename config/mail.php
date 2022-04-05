@@ -115,4 +115,5 @@ return [
         ],
     ],
 
+    'admin_email_address' => env('ADMIN_EMAIL_ADDRESS', 'test@localhost.com'),
 ];

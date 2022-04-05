@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ArticleCreated;
 use App\Http\Requests\Article\ArticleRequest;
 use App\Models\Article;
 use App\Models\Tag;
@@ -54,6 +55,7 @@ class ArticlesController extends Controller
         $attributes = $request->validated();
         $attributes['owner_id'] = auth()->id();
         $article = Article::create($attributes);
+
         $tagsSynchronizer->sync(collect(explode(',', request('tags'))), $article);
 
         return redirect('/articles');
