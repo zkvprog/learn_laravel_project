@@ -1,29 +1,32 @@
-@extends('layout.master')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Feedback') }}
+        </h2>
+    </x-slot>
 
-@section('content')
-    <div class="col-md-8 blog-main">
-        <h3 class="pb-3 mb-4 font-italic border-bottom">
-            Список обращений
-        </h3>
-
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Email</th>
-                <th scope="col">Message</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach($rows as $row)
-            <tr>
-                <th scope="row">{{$row->id}}</th>
-                <td>{{$row->email}}</td>
-                <td>{{$row->text}}</td>
-            </tr>
-            @endforeach
-            </tbody>
-        </table>
-
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <table class="table">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Message</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($rows as $row)
+                        <tr>
+                            <th scope="row">{{$row->id}}</th>
+                            <td>{{$row->email}}</td>
+                            <td>{{$row->text}}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-@endsection
+</x-app-layout>

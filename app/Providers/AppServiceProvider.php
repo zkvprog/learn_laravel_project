@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View;
@@ -29,6 +30,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        \Blade::if('admin', function () {
+            if ($user = auth()->user()) {
+                return $user->isAdmin();
+            }
+
+            return false;
+        });
     }
 }
