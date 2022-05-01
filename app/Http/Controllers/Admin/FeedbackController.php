@@ -1,12 +1,20 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Feedback;
-use Illuminate\Http\Request;
+use function redirect;
+use function request;
+use function view;
 
 class FeedbackController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('admin');
+    }
+
     public function index()
     {
         $rows = Feedback::all();

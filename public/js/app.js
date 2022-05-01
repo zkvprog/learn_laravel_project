@@ -4961,6 +4961,66 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./resources/js/admin.js":
+/*!*******************************!*\
+  !*** ./resources/js/admin.js ***!
+  \*******************************/
+/***/ (() => {
+
+;
+
+(function () {
+  var publishArticle = function publishArticle(element) {
+    axios.put(element.dataset.url, {
+      published: 1
+    }).then(function (response) {
+      element.classList.remove('fa-eye');
+      element.classList.remove('js-publish-article');
+      element.classList.add('js-unpublish-article');
+      element.classList.add('fa-eye-slash');
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  };
+
+  var unpublishArticle = function unpublishArticle(element) {
+    axios.put(element.dataset.url, {
+      published: 0
+    }).then(function (response) {
+      element.classList.remove('js-unpublish-article');
+      element.classList.remove('fa-eye-slash');
+      element.classList.add('fa-eye');
+      element.classList.add('js-publish-article');
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  };
+
+  var deleteArticle = function deleteArticle(element) {
+    axios["delete"](element.dataset.url).then(function (response) {
+      element.closest('tr').remove();
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  };
+
+  document.addEventListener('click', function (e) {
+    if (e.target.classList.contains('js-publish-article')) {
+      publishArticle(e.target);
+    }
+
+    if (e.target.classList.contains('js-unpublish-article')) {
+      unpublishArticle(e.target);
+    }
+
+    if (e.target.classList.contains('js-delete-article')) {
+      deleteArticle(e.target);
+    }
+  });
+})();
+
+/***/ }),
+
 /***/ "./resources/js/app.js":
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
@@ -4971,6 +5031,8 @@ module.exports = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var alpinejs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpinejs */ "./node_modules/alpinejs/dist/module.esm.js");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+
+__webpack_require__(/*! ./admin */ "./resources/js/admin.js");
 
 
 window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"];

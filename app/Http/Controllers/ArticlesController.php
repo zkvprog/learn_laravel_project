@@ -26,7 +26,11 @@ class ArticlesController extends Controller
     public function index()
     {
         if (auth()->check()) {
-            $articles = auth()->user()->articles()->published(1)->with('tags')->latest()->get();
+            if (auth()->user()->isAdmin()) {
+                $articles = Article::with('tags')->latest()->get();
+            } else {
+                $articles = auth()->user()->articles()->published(1)->with('tags')->latest()->get();
+            }
         } else {
             $articles = Article::published(1)->with('tags')->latest()->get();
         }
@@ -69,7 +73,9 @@ class ArticlesController extends Controller
      */
     public function show(Article $article)
     {
-        return view('articles.show', compact('article'));
+        $articleEditUrl = auth()->user()->isAdmin() ? route('admin.articles.edit', ['article' => $article->id]) : route('article.edit', ['article' => $article->slug]);
+
+        return view('articles.show', ['article' => $article, 'articleEditUrl' => $articleEditUrl]);
     }
 
     /**
