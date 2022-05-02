@@ -10,6 +10,7 @@ class Role extends Model
     use HasFactory;
 
     public const ADMIN_ROLE_ID = 1;
+    public const USER_ROLE_ID = 2;
 
     public function users()
     {
