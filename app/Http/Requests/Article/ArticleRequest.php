@@ -29,6 +29,7 @@ class ArticleRequest extends FormRequest
             'preview' => 'required|max:255',
             'body' => 'required',
             'published' => '',
+            'owner_id' => '',
         ];
 
         if ($this->isMethod('put') || $this->isMethod('patch')) {
