@@ -16,6 +16,7 @@ Route::post('/articles/{article}/comments', [\App\Http\Controllers\ArticleCommen
 //Статьи
 Route::resource('articles', \App\Http\Controllers\ArticlesController::class, [
     'names' => [
+        'show' => 'articles.show',
         'edit' => 'articles.edit'
     ]
 ]);
