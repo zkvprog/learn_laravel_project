@@ -3,7 +3,6 @@
 namespace App\Listeners;
 
 use App\Events\ArticleChanged;
-use App\Events\ArticleCreated;
 use App\Notifications\ArticleNotification;
 use Illuminate\Support\Facades\Notification;
 
@@ -28,5 +27,9 @@ class SendArticleNotification
     public function handle(ArticleChanged $event)
     {
         Notification::route('mail', config('mail.admin_email_address'))->notify(new ArticleNotification($event->article, $event->event));
+
+        if ($event->article->published) {
+            app(\App\Services\PushAll\PushAllBroadcast::class)->send('Создана новая статья', $event->article->title);
+        }
     }
 }

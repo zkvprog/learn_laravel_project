@@ -28,6 +28,12 @@
                         {{ __('Feedback') }}
                     </x-nav-link>
                 </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('admin.pushall.form')" :active="request()->routeIs('admin.pushall.form')">
+                        {{ __('Send push') }}
+                    </x-nav-link>
+                </div>
             </div>
 
             <!-- Settings Dropdown -->
