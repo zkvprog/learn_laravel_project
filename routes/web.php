@@ -28,6 +28,9 @@ Route::middleware(['auth'])->group(function() {
             Route::post('/feedback', [\App\Http\Controllers\Admin\FeedbackController::class, 'store']);
             Route::get('/feedback', [\App\Http\Controllers\Admin\FeedbackController::class, 'index'])->name('admin.feedback');
 
+            Route::get('/sendpush', [\App\Http\Controllers\Admin\PushServiceController::class, 'index'])->name('admin.pushall.form');
+            Route::post('/sendpush', [\App\Http\Controllers\Admin\PushServiceController::class, 'send'])->name('admin.pushall.send');
+
             Route::get('/articles', [\App\Http\Controllers\Admin\ArticlesController::class, 'index'])->name('admin.articles');
             Route::get('/articles/{article:id}', [\App\Http\Controllers\Admin\ArticlesController::class, 'edit'])->name('admin.articles.edit');
             Route::patch('/articles/{article:id}', [\App\Http\Controllers\Admin\ArticlesController::class, 'update'])->name('admin.articles.update');
