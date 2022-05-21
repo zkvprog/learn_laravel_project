@@ -7,9 +7,6 @@ use App\Models\User;
 
 trait HasHistory
 {
-    protected $entity;
-    protected static $tableHistory = 'history';
-
     protected static function getHistoryEvents()
     {
         return ['created', 'updated', 'deleted'];
