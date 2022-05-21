@@ -58,7 +58,9 @@
                             <div>
                                 <small class="text-muted">{{$article->created_at->toFormattedDateString()}}</small>
                             </div>
-
+                            <div class="h5">
+                                {{ $comment->user->name }}
+                            </div>
                             <div>
                                 {{$comment->text}}
                             </div>

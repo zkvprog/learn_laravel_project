@@ -5,12 +5,13 @@ namespace App\Models;
 use App\Events\ArticleCreated;
 use App\Events\ArticleUpdated;
 use App\Events\ArticleDeleted;
+use App\Models\Traits\HasHistory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model
 {
-    use HasFactory;
+    use HasFactory, HasHistory;
     public $fillable = ['slug', 'title', 'preview', 'body', 'published', 'owner_id'];
 
     protected $dispatchesEvents = [
@@ -34,9 +35,9 @@ class Article extends Model
         return $this->hasMany(Comment::class);
     }
 
-    public function addComment($attributes)
+    public function addComment(array $attributes)
     {
-        return $this->comments()->create($attributes);
+        return $this->comments()->create(['user_id' => auth()->id()] + $attributes);
     }
 
     public function tags()
