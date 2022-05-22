@@ -11,7 +11,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model
 {
-    use HasFactory, HasHistory;
+    use HasFactory;
+    use HasHistory;
+
     public $fillable = ['slug', 'title', 'preview', 'body', 'published', 'owner_id'];
 
     protected $dispatchesEvents = [
