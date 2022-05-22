@@ -31,6 +31,8 @@ class ArticlesController extends Controller
             } else {
                 $articles = auth()->user()->articles()->published(1)->with('tags')->latest()->get();
             }
+
+
         } else {
             $articles = Article::published(1)->with('tags')->latest()->get();
         }
@@ -74,6 +76,9 @@ class ArticlesController extends Controller
     public function show(Article $article)
     {
         $articleEditUrl = auth()->user()->isAdmin() ? route('admin.articles.edit', ['article' => $article->id]) : route('article.edit', ['article' => $article->slug]);
+        $article->load(['comments' => function($query) {
+            $query->with('user')->get();
+        }]);
 
         return view('articles.show', ['article' => $article, 'articleEditUrl' => $articleEditUrl]);
     }
