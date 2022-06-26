@@ -27,9 +27,9 @@ class ArticlesController extends Controller
     {
         if (auth()->check()) {
             if (auth()->user()->isAdmin()) {
-                $articles = Article::with('tags')->latest()->simplePaginate(8);
+                $articles = Article::with('tags')->latest()->simplePaginate(10);
             } else {
-                $articles = auth()->user()->articles()->published(1)->with('tags')->latest()->simplePaginate(8);
+                $articles = auth()->user()->articles()->published(1)->with('tags')->latest()->simplePaginate(10);
             }
 
 

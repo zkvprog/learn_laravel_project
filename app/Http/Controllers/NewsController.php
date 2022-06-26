@@ -4,14 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ContentRequests;
 use App\Models\News;
-use App\Services\TagsSynchronizer;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 
 class NewsController extends Controller
 {
     public function __construct()
     {
         $this->middleware('admin')->except('index');
+
+        $contentResourcesType = News::getContentType();
+        View::share('contentResourcesType', $contentResourcesType);
     }
 
     /**
@@ -21,7 +23,17 @@ class NewsController extends Controller
      */
     public function index()
     {
-        //
+        if (auth()->check()) {
+            if (auth()->user()->isAdmin()) {
+                $contentResources = News::latest()->simplePaginate(8);
+            } else {
+                $contentResources = auth()->user()->news()->published(1)->latest()->simplePaginate(10);
+            }
+        } else {
+            $contentResources = News::published(1)->latest()->simplePaginate(10);
+        }
+
+        return view('content.index', compact('contentResources'));
     }
 
     /**
@@ -31,7 +43,7 @@ class NewsController extends Controller
      */
     public function create()
     {
-        return view('news.create');
+        return view('content.create');
     }
 
     /**
@@ -40,15 +52,13 @@ class NewsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ContentRequests $request, TagsSynchronizer $tagsSynchronizer)
+    public function store(ContentRequests $request)
     {
         $attributes = $request->validated();
         $attributes['owner_id'] = auth()->id();
         $news = News::create($attributes);
 
-        $tagsSynchronizer->sync(collect(explode(',', request('tags'))), $news);
-
-        return redirect('/news');
+        return redirect()->route('news.index');
     }
 
     /**
@@ -60,11 +70,8 @@ class NewsController extends Controller
     public function show(News $news)
     {
         $newsEditUrl = auth()->user()->isAdmin() ? route('admin.news.edit', ['news' => $news->id]) : route('news.edit', ['news' => $news->slug]);
-        $news->load(['comments' => function($query) {
-            $query->with('user')->get();
-        }]);
 
-        return view('news.show', ['news' => news, 'newsEditUrl' => $newsEditUrl]);
+        return view('content.show', ['contentResource' => $news, 'contentResourceEditUrl' => $newsEditUrl]);
     }
 
     /**
@@ -75,7 +82,7 @@ class NewsController extends Controller
      */
     public function edit(News $news)
     {
-        return view('news.edit', compact('news'));
+        return view('content.edit', compact('news'));
     }
 
     /**
@@ -91,7 +98,7 @@ class NewsController extends Controller
 
         $tagsSynchronizer->sync(collect(explode(',', request('tags'))), $news);
 
-        return redirect('/news/' . $news->slug);
+        return redirect()->route('news.edit', $news->slug);
     }
 
     /**
@@ -103,6 +110,6 @@ class NewsController extends Controller
     public function destroy(News $news)
     {
         $news->delete();
-        return redirect('/news');
+        return redirect()->route('news.index');
     }
 }

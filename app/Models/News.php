@@ -14,4 +14,9 @@ class News extends AbstractContentResource
     use HasFactory;
 
     public $fillable = ['slug', 'title', 'preview', 'body', 'published', 'owner_id'];
+
+    public static function getContentType()
+    {
+        return 'news';
+    }
 }
