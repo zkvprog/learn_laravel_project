@@ -11,13 +11,23 @@ Route::view('/contacts/', 'contacts');
 Route::get('articles/tags/{tag}', [\App\Http\Controllers\TagsController::class, 'index']);
 
 //Комментарии
-Route::post('/articles/{article}/comments', [\App\Http\Controllers\ArticleCommentsController::class, 'store']);
+Route::post('/articles/{article}/comments', [\App\Http\Controllers\ArticleCommentsController::class, 'store'])->name('comments.store');
 
 //Статьи
 Route::resource('articles', \App\Http\Controllers\ArticlesController::class, [
     'names' => [
+        'create' => 'articles.create',
         'show' => 'articles.show',
         'edit' => 'articles.edit'
+    ]
+]);
+
+//Новости
+Route::resource('news', \App\Http\Controllers\NewsController::class, [
+    'names' => [
+        'create' => 'news.create',
+        'show' => 'news.show',
+        'edit' => 'news.edit'
     ]
 ]);
 
@@ -36,6 +46,12 @@ Route::middleware(['auth'])->group(function() {
             Route::patch('/articles/{article:id}', [\App\Http\Controllers\Admin\ArticlesController::class, 'update'])->name('admin.articles.update');
             Route::delete('/articles/{article:id}', [\App\Http\Controllers\Admin\ArticlesController::class, 'destroy'])->name('admin.articles.delete');
             Route::put('/articles/{article:id}/published', [\App\Http\Controllers\Admin\ArticlesController::class, 'updatePublished'])->name('admin.articles.update.published');
+
+            Route::get('/news', [\App\Http\Controllers\Admin\NewsController::class, 'index'])->name('admin.news');
+            Route::get('/news/{news:id}', [\App\Http\Controllers\Admin\NewsController::class, 'edit'])->name('admin.news.edit');
+            Route::patch('/news/{news:id}', [\App\Http\Controllers\Admin\NewsController::class, 'update'])->name('admin.news.update');
+            Route::delete('/news/{news:id}', [\App\Http\Controllers\Admin\NewsController::class, 'destroy'])->name('admin.news.delete');
+            Route::put('/news/{news:id}/published', [\App\Http\Controllers\Admin\NewsController::class, 'updatePublished'])->name('admin.news.update.published');
         });
 
         Route::get('/dashboard', function () {
