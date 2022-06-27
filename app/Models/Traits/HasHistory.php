@@ -24,7 +24,7 @@ trait HasHistory
     protected function addChangesInHistory($model, $event)
     {
         $this->history()->create([
-            'user_id' => auth()->id(),
+            'user_id' => auth()->check() ? auth()->id() : $model->owner_id,
             'action' => $event,
             'changes' => json_encode($model->getDirty())
         ]);
