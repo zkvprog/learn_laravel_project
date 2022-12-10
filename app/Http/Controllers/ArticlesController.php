@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\ArticleCreated;
-use App\Http\Requests\Article\ArticleRequest;
+use App\Http\Requests\ContentRequests;
 use App\Models\Article;
 use App\Models\Tag;
 use App\Services\TagsSynchronizer;
@@ -27,12 +27,14 @@ class ArticlesController extends Controller
     {
         if (auth()->check()) {
             if (auth()->user()->isAdmin()) {
-                $articles = Article::with('tags')->latest()->get();
+                $articles = Article::with('tags')->latest()->simplePaginate(10);
             } else {
-                $articles = auth()->user()->articles()->published(1)->with('tags')->latest()->get();
+                $articles = auth()->user()->articles()->published(1)->with('tags')->latest()->simplePaginate(10);
             }
+
+
         } else {
-            $articles = Article::published(1)->with('tags')->latest()->get();
+            $articles = Article::published(1)->with('tags')->latest()->simplePaginate(8);
         }
 
         return view('articles.index', compact('articles'));
@@ -54,7 +56,7 @@ class ArticlesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ArticleRequest $request, TagsSynchronizer $tagsSynchronizer)
+    public function store(ContentRequests $request, TagsSynchronizer $tagsSynchronizer)
     {
         $attributes = $request->validated();
         $attributes['owner_id'] = auth()->id();
@@ -74,6 +76,9 @@ class ArticlesController extends Controller
     public function show(Article $article)
     {
         $articleEditUrl = auth()->user()->isAdmin() ? route('admin.articles.edit', ['article' => $article->id]) : route('article.edit', ['article' => $article->slug]);
+        $article->load(['comments' => function($query) {
+            $query->with('user')->get();
+        }]);
 
         return view('articles.show', ['article' => $article, 'articleEditUrl' => $articleEditUrl]);
     }
@@ -96,7 +101,7 @@ class ArticlesController extends Controller
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function update(ArticleRequest $request, Article $article, TagsSynchronizer $tagsSynchronizer)
+    public function update(ContentRequests $request, Article $article, TagsSynchronizer $tagsSynchronizer)
     {
         $article->update($request->validated());
 

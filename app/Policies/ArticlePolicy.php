@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\Article;
+use App\Models\AbstractContentResource;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -28,7 +28,7 @@ class ArticlePolicy
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Article $article)
+    public function view(User $user, AbstractContentResource $article)
     {
         //
     }
@@ -51,9 +51,9 @@ class ArticlePolicy
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Article $article)
+    public function update(User $user, AbstractContentResource $contentResource)
     {
-        return $article->owner_id == $user->id;
+        return $contentResource->owner_id == $user->id || $user->isAdmin();
     }
 
     /**
@@ -63,7 +63,7 @@ class ArticlePolicy
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Article $article)
+    public function delete(User $user, AbstractContentResource $article)
     {
         //
     }
@@ -75,7 +75,7 @@ class ArticlePolicy
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Article $article)
+    public function restore(User $user, AbstractContentResource $article)
     {
         //
     }
@@ -87,7 +87,7 @@ class ArticlePolicy
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Article $article)
+    public function forceDelete(User $user, AbstractContentResource $article)
     {
         //
     }

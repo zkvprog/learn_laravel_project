@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Articles') }}
+            {{ __('News') }}
         </h2>
     </x-slot>
 
@@ -21,33 +21,33 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($articles as $article)
+                        @foreach($news as $newsCard)
                             <tr>
                                 <td>{{$loop->iteration}}</td>
-                                <td>{{$article->slug}}</td>
-                                <td>{{$article->title}}</td>
-                                <td>{{$article->owner->name}}</td>
+                                <td>{{$newsCard->slug}}</td>
+                                <td>{{$newsCard->title}}</td>
+                                <td>{{$newsCard->owner->name}}</td>
                                 <td>
-                                    <a class="edit-icon-link" href="{{ route('admin.articles.edit', ['article' => $article->id]) }}">
+                                    <a class="edit-icon-link" href="{{ route('admin.news.edit', ['news' => $newsCard->id]) }}">
                                         <i class="fas fa-pen"></i>
                                     </a>
                                 </td>
                                 <td>
-                                    @if($article->published)
-                                        <i class="js-unpublish-card icon-link fas fa-eye-slash" data-url="{{ route('admin.articles.update.published', ['article' => $article->id]) }}"></i>
+                                    @if($newsCard->published)
+                                        <i class="js-unpublish-article icon-link fas fa-eye-slash" data-url="{{ route('admin.news.update.published', ['news' => $newsCard->id]) }}"></i>
                                     @else
-                                        <i class="js-publish-card icon-link fas fa-eye" data-url="{{ route('admin.articles.update.published', ['article' => $article->id]) }}"></i>
+                                        <i class="js-publish-article icon-link fas fa-eye" data-url="{{ route('admin.news.update.published', ['news' => $newsCard->id]) }}"></i>
                                     @endif
                                 </td>
                                 <td>
-                                    <i class="icon-link js-delete-card fas fa-trash-alt" data-url="{{ route('admin.articles.delete', ['article' => $article->id]) }}"></i>
+                                    <i class="icon-link js-delete-article fas fa-trash-alt" data-url="{{ route('admin.news.delete', ['news' => $newsCard->id]) }}"></i>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
 
-                {{ $articles->links() }}
+                {{ $news->links() }}
             </div>
         </div>
     </div>

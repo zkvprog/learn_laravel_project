@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\AbstractContentResource;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -13,7 +14,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        'App\Models\Article' => 'App\Policies\ArticlePolicy',
+        'App\Models\AbstractContentResource' => 'App\Policies\ArticlePolicy',
     ];
 
     /**
