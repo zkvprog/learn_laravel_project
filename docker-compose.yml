@@ -24,6 +24,7 @@ services:
         working_dir: /application
         volumes:
             - '.:/application'
+            - mysql-data:/var/lib/mysql
         environment:
             - MYSQL_ROOT_PASSWORD=root
             - MYSQL_DATABASE=laravel
@@ -43,3 +44,6 @@ services:
             PMA_HOST: mysql
             PMA_PORT: 3306
         restart: always
+
+volumes:
+    mysql-data:
