@@ -8,4 +8,4 @@
 
 
 #### Result
-<http://localhost:38000/>
+<http://blogapp.exmpl>
