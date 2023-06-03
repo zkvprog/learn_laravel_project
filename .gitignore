@@ -15,3 +15,5 @@ yarn-error.log
 /.idea
 /.vscode
 *.zip
+/public/css
+/public/js
