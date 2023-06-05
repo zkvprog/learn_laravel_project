@@ -3,7 +3,7 @@
         @foreach($contentResource->comments as $comment)
             <div class="list-group-item">
                 <div>
-                    <small class="text-muted">{{$article->created_at->toFormattedDateString()}}</small>
+                    <small class="text-muted">{{$contentResource->created_at->toFormattedDateString()}}</small>
                 </div>
                 <div class="h5">
                     {{ $comment->user->name }}

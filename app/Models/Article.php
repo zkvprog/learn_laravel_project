@@ -20,4 +20,9 @@ class Article extends AbstractContentResource
         'updated' => ArticleUpdated::class,
         'deleted' => ArticleDeleted::class,
     ];
+
+    public static function getContentType()
+    {
+        return 'articles';
+    }
 }

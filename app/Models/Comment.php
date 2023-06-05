@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Comment extends Model
 {
@@ -11,12 +13,12 @@ class Comment extends Model
 
     public $fillable = ['article_id', 'text', 'user_id'];
 
-    public function article()
+    public function commentable(): MorphTo
     {
-        return $this->belongsTo(Article::class);
+        return $this->morphTo(__FUNCTION__, 'resource_type', 'resource_id');
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

@@ -1,7 +1,7 @@
 <div class="mb-2">
     @include('layout.errors')
 
-    <form method="post" action="{{ route('comments.store', $contentResource->slug) }}">
+    <form method="post" action="{{ route('comments.store', [$contentResource->getMorphClass(), $contentResource->slug]) }}">
         @csrf
 
         <div class="form-group mb-1">

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View;
@@ -37,5 +38,10 @@ class AppServiceProvider extends ServiceProvider
 
             return false;
         });
+
+        Relation::enforceMorphMap([
+            'articles' => 'App\Models\Article',
+            'news' => 'App\Models\News',
+        ]);
     }
 }

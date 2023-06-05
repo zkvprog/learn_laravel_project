@@ -9,6 +9,8 @@ abstract class AbstractContentResource extends Model
 {
     use HasHistory;
 
+    abstract public static function getContentType();
+
     public function getRouteKeyName()
     {
         return 'slug';
@@ -21,7 +23,7 @@ abstract class AbstractContentResource extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->morphMany(Comment::class, 'commentable', 'resource_type', 'resource_id');
     }
 
     public function addComment(array $attributes)

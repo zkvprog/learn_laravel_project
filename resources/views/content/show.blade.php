@@ -27,5 +27,7 @@
         <nav class="blog-pagination mb-5">
             <a class="btn btn-outline-primary" href="{{ route($contentResourcesType . '.index') }}">Вернуться к списку</a>
         </nav>
+
+        @include('comments.index', ['contentResourceType' => $contentResource->getMorphClass(), 'contentResource' => $contentResource])
     </div>
 @endsection

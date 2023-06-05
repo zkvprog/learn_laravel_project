@@ -11,7 +11,7 @@ Route::view('/contacts/', 'contacts');
 Route::get('articles/tags/{tag}', [\App\Http\Controllers\TagsController::class, 'index']);
 
 //Комментарии
-Route::post('/articles/{article}/comments', [\App\Http\Controllers\ArticleCommentsController::class, 'store'])->name('comments.store');
+Route::post('/{commentableType}/{commentable}/comments', [\App\Http\Controllers\ResourceCommentsController::class, 'store'])->name('comments.store');
 
 //Статьи
 Route::resource('articles', \App\Http\Controllers\ArticlesController::class, [

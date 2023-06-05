@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Article;
+use App\Models\News;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -46,6 +48,15 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
+        });
+
+        Route::pattern('commentableType', 'articles|news');
+
+        Route::bind('commentable', function ($slug) {
+            $type = app()->request->route('commentableType');
+            $models = ['articles' => Article::class, 'news' => News::class];
+            $model = $models[$type];
+            return (new $model)->where('slug', $slug)->firstOrFail();
         });
     }
 
