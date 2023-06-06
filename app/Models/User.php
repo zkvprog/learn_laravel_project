@@ -42,6 +42,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function scopeAdmins($query)
+    {
+        return $query->where('role_id', Role::ADMIN_ROLE_ID);
+    }
+
     public function articles()
     {
         return $this->hasMany(Article::class, 'owner_id');
