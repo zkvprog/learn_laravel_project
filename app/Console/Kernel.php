@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\ArticlesForPeriod;
+use App\Console\Commands\Job\NewResourcesReportJob;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -28,6 +29,9 @@ class Kernel extends ConsoleKernel
             ->mondays()
             ->at('12:00')
         ;
+
+        $schedule->command(NewResourcesReportJob::class, [])
+            ->weeklyOn(1, '10:00');;
     }
 
     /**
