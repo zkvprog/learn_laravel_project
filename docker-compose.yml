@@ -54,5 +54,8 @@ services:
             - php-fpm
         tty: true
 
+    redis:
+        image: redis:latest
+
 volumes:
     mysql-data:
