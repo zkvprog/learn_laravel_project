@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class Tag extends Model
 {
@@ -23,6 +24,11 @@ class Tag extends Model
 
     public static function tagsCloud()
     {
-        return (new static)->has('articles')->get();
+        $tagsQuery = (new static)->has('articles')->withCount('articles')->orderBy('articles_count', 'desc');
+
+        return Cache::remember('tags:cloud', 60 * 60 * 4, function () use ($tagsQuery) {
+            return $tagsQuery->paginate(5);
+        });
+
     }
 }
