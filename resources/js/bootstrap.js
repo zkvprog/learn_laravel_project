@@ -26,4 +26,14 @@ window.Echo = new Echo({
     host: window.location.hostname + ':6001'
 });
 
+import { Notyf } from 'notyf';
+import 'notyf/notyf.min.css';
+
+window.notyf = new Notyf({
+    duration: 2500,
+    position: {
+        x: 'right',
+        y: 'top',
+    },
+});
 
