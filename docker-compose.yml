@@ -57,5 +57,16 @@ services:
     redis:
         image: redis:latest
 
+    websockets:
+        build: phpdocker/websockets
+        working_dir: /application
+        volumes:
+            - '.:/application'
+        ports:
+            - '6001:6001'
+        depends_on:
+            - redis
+        tty: true
+
 volumes:
     mysql-data:
