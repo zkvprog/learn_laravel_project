@@ -36,4 +36,9 @@ class FeedbackController extends Controller
 
         return redirect('/admin/feedback');
     }
+
+    public function show(Feedback $feedback)
+    {
+        return view('admin.feedback.show', compact('feedback'));
+    }
 }

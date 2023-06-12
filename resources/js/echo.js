@@ -1,6 +1,8 @@
 Echo
     .channel('feedback.created')
     .listen('FeedbackCreated', (data) => {
-        notyf.success('New feedback created');
-        console.log(data);
+        const notification = notyf.success('New feedback created');
+        notification.on('click', ({target, event}) => {
+            window.location.href = '/admin/feedback/' + data.feedback.id;
+        });
     })

@@ -19,7 +19,9 @@
                     <tbody>
                     @foreach($rows as $row)
                         <tr>
-                            <th scope="row">{{$row->id}}</th>
+                            <th scope="row">
+                                <a href="{{route('admin.feedback.show', $row)}}">{{$row->id}}</a>
+                            </th>
                             <td>{{$row->email}}</td>
                             <td>{{$row->text}}</td>
                         </tr>

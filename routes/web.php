@@ -7,6 +7,10 @@ Route::get('/', [\App\Http\Controllers\ArticlesController::class, 'index'])->nam
 Route::view('/about/', 'about');
 Route::view('/contacts/', 'contacts');
 
+Route::get('/test', function () {
+   event(new \App\Events\TestEvent);
+});
+
 //Теги
 Route::get('articles/tags/{tag}', [\App\Http\Controllers\TagsController::class, 'index']);
 
@@ -37,6 +41,7 @@ Route::middleware(['auth'])->group(function() {
         Route::prefix('admin')->group(function() {
             Route::post('/feedback', [\App\Http\Controllers\Admin\FeedbackController::class, 'store']);
             Route::get('/feedback', [\App\Http\Controllers\Admin\FeedbackController::class, 'index'])->name('admin.feedback');
+            Route::get('/feedback/{feedback:id}', [\App\Http\Controllers\Admin\FeedbackController::class, 'show'])->name('admin.feedback.show');
 
             Route::get('/sendpush', [\App\Http\Controllers\Admin\PushServiceController::class, 'index'])->name('admin.pushall.form');
             Route::post('/sendpush', [\App\Http\Controllers\Admin\PushServiceController::class, 'send'])->name('admin.pushall.send');
